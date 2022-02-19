@@ -11,7 +11,7 @@ import java.time.Instant;
 @Value
 public class PlayerMarkedCellEvent implements Event {
 
-    Instant created;
+    Instant createdAt;
     GameName gameName;
     PlayerName playerName;
     GridCellNumber gridCellNumber;
@@ -29,5 +29,13 @@ public class PlayerMarkedCellEvent implements Event {
     public void updateGame(Game game) {
         game.getEvents().add(this);
         game.playerMakesMove(gameName, playerName, gridCellNumber);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s: %s put his marke into cell %s! Was it a genius or a dumm move?",
+                             this.getCreatedAt(),
+                             playerName.getValue(),
+                             gridCellNumber.getValue());
     }
 }

@@ -2,7 +2,7 @@ package com.example.tictactoe.adapter.incoming;
 
 import com.example.tictactoe.application.TicTacToeCommandApplicationService;
 import com.example.tictactoe.application.TicTacToeQueryApplicationService;
-import com.example.tictactoe.domain.game.Game;
+import com.example.tictactoe.domain.game.GameView;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,29 +33,29 @@ public class TicTacToeController {
         return "So you want to play a game of Tic Tac Toe?";
     }
 
-    @GetMapping("/{nameOfTheGame}")
-    public Game loadTheGameByItsName(@PathVariable String nameOfTheGame) {
-        return queryService.loadGame(loadGameQuery(gameName(nameOfTheGame)));
+    @GetMapping(value = "/{nameOfTheGame}", produces = "text/plain")
+    public String loadTheGameByItsName(@PathVariable String nameOfTheGame) {
+        return queryService.loadGame(loadGameQuery(gameName(nameOfTheGame))).getView();
     }
 
-    @GetMapping("/{nameOfTheGame}/{nameOfThePlayer}")
-    public Game aPlayerIsJoiningTheGame(@PathVariable String nameOfTheGame,
-                                        @PathVariable String nameOfThePlayer) {
+    @GetMapping(value = "/{nameOfTheGame}/{nameOfThePlayer}", produces = "text/plain")
+    public String aPlayerIsJoiningTheGame(@PathVariable String nameOfTheGame,
+                                            @PathVariable String nameOfThePlayer) {
         commandService.playerJoinsTheGame(playerJoinsGameCommand(gameName(nameOfTheGame),
                                                                  playerName(nameOfThePlayer)));
 
-        return queryService.loadGame(loadGameQuery(gameName(nameOfTheGame)));
+        return queryService.loadGame(loadGameQuery(gameName(nameOfTheGame))).getView();
     }
 
-    @GetMapping("/{nameOfTheGame}/{nameOfThePlayer}/{numberOfTheCellPickedByThePlayer}")
-    public Game aPlayerIsMakingAMove(@PathVariable String nameOfTheGame,
-                                     @PathVariable String nameOfThePlayer,
-                                     @PathVariable int numberOfTheCellPickedByThePlayer) {
+    @GetMapping(value = "/{nameOfTheGame}/{nameOfThePlayer}/{numberOfTheCellPickedByThePlayer}", produces = "text/plain")
+    public String aPlayerIsMakingAMove(@PathVariable String nameOfTheGame,
+                                         @PathVariable String nameOfThePlayer,
+                                         @PathVariable int numberOfTheCellPickedByThePlayer) {
         commandService.playerIsMakingAMove(playerMakesMoveCommand(gameName(nameOfTheGame),
                                                                   playerName(nameOfThePlayer),
                                                                   gridCellNumber(numberOfTheCellPickedByThePlayer)));
 
-        return queryService.loadGame(loadGameQuery(gameName(nameOfTheGame)));
+        return queryService.loadGame(loadGameQuery(gameName(nameOfTheGame))).getView();
     }
 
 }

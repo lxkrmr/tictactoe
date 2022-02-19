@@ -1,6 +1,5 @@
 package com.example.tictactoe.domain.game;
 
-import com.example.tictactoe.domain.Instruction;
 import com.example.tictactoe.domain.event.Event;
 import com.example.tictactoe.domain.event.IllegalMoveEvent;
 import com.example.tictactoe.domain.grid.Grid;
@@ -17,7 +16,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.example.tictactoe.domain.Instruction.instruction;
 import static com.example.tictactoe.domain.event.GameIsInProgressEvent.gameIsInProgressEvent;
 import static com.example.tictactoe.domain.event.IllegalMoveEvent.illegalMoveEvent;
 import static com.example.tictactoe.domain.event.PlayerHasAlreadyJoinedTheGameEvent.playerHasAlreadyJoinedTheGameEvent;
@@ -31,12 +29,12 @@ import static com.example.tictactoe.domain.grid.Grid.initGrid;
 @Data
 @AllArgsConstructor
 public class Game {
+    public static final int NUMBER_OF_RELOAD_TO_WIN = 60;
 
     GameName gameName;
     GameStatus gameStatus;
     PlayerName playersTurn;
     Grid grid;
-    List<Instruction> instructions;
     Player playerOne;
     Player playerTwo;
     List<Event> events;
@@ -47,7 +45,6 @@ public class Game {
                         CREATED,
                         null,
                         initGrid(),
-                        List.of(instruction("Add me")),
                         null,
                         null,
                         new ArrayList<>(),

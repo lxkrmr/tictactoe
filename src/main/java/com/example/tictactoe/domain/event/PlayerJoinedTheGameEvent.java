@@ -14,7 +14,7 @@ import static com.example.tictactoe.domain.player.Player.initSpectator;
 @Value
 public class PlayerJoinedTheGameEvent implements Event {
 
-    Instant created;
+    Instant createdAt;
     GameName gameName;
     PlayerName playerName;
 
@@ -41,5 +41,12 @@ public class PlayerJoinedTheGameEvent implements Event {
         }
 
         game.getSpectators().add(initSpectator(playerName));
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s: Weclome %s! Are you ready for some Tic Tac Toe?",
+                             this.getCreatedAt(),
+                             playerName.getValue());
     }
 }

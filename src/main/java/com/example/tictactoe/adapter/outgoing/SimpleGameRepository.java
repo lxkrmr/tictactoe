@@ -4,6 +4,7 @@ import com.example.tictactoe.domain.event.EventRepository;
 import com.example.tictactoe.domain.game.Game;
 import com.example.tictactoe.domain.game.GameName;
 import com.example.tictactoe.domain.game.GameRepository;
+import com.example.tictactoe.domain.game.GameView;
 import org.springframework.stereotype.Repository;
 
 import static com.example.tictactoe.domain.game.Game.initGame;

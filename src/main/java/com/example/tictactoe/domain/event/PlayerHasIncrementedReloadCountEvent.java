@@ -10,7 +10,7 @@ import java.time.Instant;
 @Value
 public class PlayerHasIncrementedReloadCountEvent implements Event {
 
-    Instant created;
+    Instant createdAt;
     GameName gameName;
     PlayerName playerName;
 
@@ -25,5 +25,12 @@ public class PlayerHasIncrementedReloadCountEvent implements Event {
     public void updateGame(Game game) {
         game.getEvents().add(this);
         game.incrementNumberOfReloadsByPlayerName(playerName);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s: %s has reloaded the page! It is getting dangerous...",
+                             this.getCreatedAt(),
+                             playerName.getValue());
     }
 }

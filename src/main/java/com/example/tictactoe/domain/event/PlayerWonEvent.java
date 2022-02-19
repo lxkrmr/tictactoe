@@ -2,23 +2,20 @@ package com.example.tictactoe.domain.event;
 
 import com.example.tictactoe.domain.game.Game;
 import com.example.tictactoe.domain.game.GameName;
-import com.example.tictactoe.domain.game.GameStatus;
 import com.example.tictactoe.domain.player.PlayerName;
 import lombok.Value;
 
 import java.time.Instant;
 
-import static com.example.tictactoe.domain.game.GameStatus.PLAYER_ONE_WON;
-
 @Value
 public class PlayerWonEvent implements Event {
 
-    Instant created;
+    Instant createdAt;
     GameName gameName;
     PlayerName playerName;
 
     public static PlayerWonEvent playerWonEvent(GameName gameName,
-                                                       PlayerName playerName) {
+                                                PlayerName playerName) {
         return new PlayerWonEvent(Instant.now(),
                                   gameName,
                                   playerName);
@@ -28,6 +25,12 @@ public class PlayerWonEvent implements Event {
     public void updateGame(Game game) {
         game.getEvents().add(this);
         game.wonByPlayerName(playerName);
+    }
 
+    @Override
+    public String toString() {
+        return String.format("%s: No way! %s has won the game. No one saw this coming, no one!",
+                             this.getCreatedAt(),
+                             playerName.getValue());
     }
 }

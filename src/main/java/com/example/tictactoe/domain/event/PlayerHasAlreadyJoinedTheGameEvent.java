@@ -10,7 +10,7 @@ import java.time.Instant;
 @Value
 public class PlayerHasAlreadyJoinedTheGameEvent implements Event {
 
-    Instant created;
+    Instant createdAt;
     GameName gameName;
     PlayerName playerName;
 
@@ -24,5 +24,12 @@ public class PlayerHasAlreadyJoinedTheGameEvent implements Event {
     @Override
     public void updateGame(Game game) {
         game.getEvents().add(this);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s: Hey %s you have already joined the game. Chill or make your move!",
+                             this.getCreatedAt(),
+                             playerName.getValue());
     }
 }

@@ -11,7 +11,7 @@ import java.time.Instant;
 @Value
 public class IllegalMoveEvent implements Event {
 
-    Instant created;
+    Instant createdAt;
     GameName gameName;
     PlayerName playerName;
     GridCellNumber gridCellNumber;
@@ -28,5 +28,13 @@ public class IllegalMoveEvent implements Event {
     @Override
     public void updateGame(Game game) {
         game.getEvents().add(this);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s: Hey %s you are not allowed to put your mark into cell number %s, shame shame shame!",
+                             this.getCreatedAt(),
+                             playerName.getValue(),
+                             gridCellNumber.getValue());
     }
 }
