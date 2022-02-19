@@ -2,6 +2,8 @@ package com.example.tictactoe.domain.event;
 
 import lombok.Value;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,9 +18,11 @@ public class EventsView {
             return new EventsView(TEMPLATE_PLAYER_MISSING);
         }
 
-        var view = events.stream()
-                         .map(Event::toString)
-                         .collect(Collectors.joining("\n"));
+        var copyOfEvents = new ArrayList<>(List.copyOf(events));
+        Collections.reverse(copyOfEvents);
+        var view = copyOfEvents.stream()
+                               .map(Event::toString)
+                               .collect(Collectors.joining("\n"));
         return new EventsView(view);
     }
 }

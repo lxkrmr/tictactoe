@@ -31,12 +31,12 @@ public class PlayerJoinedTheGameEvent implements Event {
 
         if (game.getPlayerOne() == null) {
             game.setPlayerOne(initPlayerOne(playerName));
-            game.setPlayersTurn(playerName);
             return;
         }
 
         if (game.getPlayerTwo() == null) {
             game.setPlayerTwo(initPlayerTwo(playerName));
+            game.setPlayersTurn(game.getPlayerOne().getPlayerName());
             return;
         }
 

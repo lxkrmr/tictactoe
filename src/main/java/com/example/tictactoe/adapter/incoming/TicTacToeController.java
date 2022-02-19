@@ -2,7 +2,6 @@ package com.example.tictactoe.adapter.incoming;
 
 import com.example.tictactoe.application.TicTacToeCommandApplicationService;
 import com.example.tictactoe.application.TicTacToeQueryApplicationService;
-import com.example.tictactoe.domain.game.GameView;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +29,7 @@ public class TicTacToeController {
 
     @GetMapping(produces = "text/plain")
     public String welcome() {
-        return "So you want to play a game of Tic Tac Toe?";
+        return queryService.loadIntroduction();
     }
 
     @GetMapping(value = "/{nameOfTheGame}", produces = "text/plain")

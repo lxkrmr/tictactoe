@@ -29,6 +29,7 @@ import static com.example.tictactoe.domain.grid.Grid.initGrid;
 @Data
 @AllArgsConstructor
 public class Game {
+
     public static final int NUMBER_OF_RELOAD_TO_WIN = 60;
 
     GameName gameName;
@@ -92,8 +93,10 @@ public class Game {
         }
 
         if (isNotPlayersTurn(playerName)) {
-            return List.of(playerHasIncrementedReloadCountEvent(gameName,
-                                                                playerName));
+            var playerHasIncrementedReloadCountEvent = playerHasIncrementedReloadCountEvent(gameName,
+                                                                                            playerName);
+            return maybeGameOverByReloads(gameName).map(gameEndedEvent -> List.of(playerHasIncrementedReloadCountEvent, gameEndedEvent))
+                                                   .orElseGet(() -> List.of(playerHasIncrementedReloadCountEvent));
         }
 
         var resultOfMakeMove = makeMove(gameName, maybePlayerOneOrTwo.get(), gridCellNumber);
@@ -101,8 +104,8 @@ public class Game {
             return List.of(resultOfMakeMove);
         }
 
-        return maybeEndeOfGame(gameName, playerName).map(gameEndedEvent -> List.of(resultOfMakeMove, gameEndedEvent))
-                                                    .orElseGet(() -> List.of(resultOfMakeMove, playerTurnEndedEvent(gameName, playerName)));
+        return maybeGameOver(gameName, playerName).map(gameEndedEvent -> List.of(resultOfMakeMove, gameEndedEvent))
+                                                  .orElseGet(() -> List.of(resultOfMakeMove, playerTurnEndedEvent(gameName, playerName)));
     }
 
     private boolean isGameNotPlayable() {
@@ -115,17 +118,17 @@ public class Game {
                        .isEmpty();
     }
 
+    private Optional<Event> maybeGameOverByReloads(GameName gameName) {
+        return playerOne.maybeHasEnoughReloadsToWin(gameName, NUMBER_OF_RELOAD_TO_WIN)
+                        .or(() -> playerTwo.maybeHasEnoughReloadsToWin(gameName, NUMBER_OF_RELOAD_TO_WIN));
+    }
+
     private Event makeMove(GameName gameName, Player player, GridCellNumber gridCellNumber) {
         return grid.updateGridCell(gameName, player, gridCellNumber);
     }
 
-    private Optional<Event> maybeEndeOfGame(GameName gameName, PlayerName playerName) {
-        return grid.maybeGameIsOver(gameName, playerName);
-    }
-
-    public void wonByPlayerName(PlayerName playerName) {
-        maybePlayerByPlayerName(playerName).map(Player::toWonStatus)
-                                           .ifPresent(this::setGameStatus);
+    private Optional<Event> maybeGameOver(GameName gameName, PlayerName playerName) {
+        return maybeGameOverByReloads(gameName).or(() -> grid.maybeGameIsOver(gameName, playerName));
     }
 
     public void incrementNumberOfReloadsByPlayerName(PlayerName playerName) {

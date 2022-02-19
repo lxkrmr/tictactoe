@@ -15,6 +15,8 @@ import java.util.stream.Stream;
 import static com.example.tictactoe.domain.event.GameIsDrawEvent.gameIsDrawEvent;
 import static com.example.tictactoe.domain.event.IllegalMoveEvent.illegalMoveEvent;
 import static com.example.tictactoe.domain.event.PlayerWonEvent.playerWonEvent;
+import static com.example.tictactoe.domain.game.GameStatus.PLAYER_ONE_WON_BY_GETTING_A_TIC_TAC_TOE;
+import static com.example.tictactoe.domain.game.GameStatus.PLAYER_TWO_WON_BY_GETTING_A_TIC_TAC_TOE;
 import static com.example.tictactoe.domain.grid.GridCell.initCell;
 import static com.example.tictactoe.domain.player.PlayersMark.O;
 import static com.example.tictactoe.domain.player.PlayersMark.X;
@@ -55,11 +57,11 @@ public class Grid {
 
     public Optional<Event> maybeGameIsOver(GameName gameName, PlayerName playerName) {
         if (playerOneWon()) {
-            return Optional.of(playerWonEvent(gameName, playerName));
+            return Optional.of(playerWonEvent(gameName, playerName, PLAYER_ONE_WON_BY_GETTING_A_TIC_TAC_TOE));
         }
 
         if (playerTwoWon()) {
-            return Optional.of(playerWonEvent(gameName, playerName));
+            return Optional.of(playerWonEvent(gameName, playerName, PLAYER_TWO_WON_BY_GETTING_A_TIC_TAC_TOE));
         }
 
         if (isDraw()) {
